@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = "https://tfgfinansaludc.onrender.com";
 document.addEventListener("DOMContentLoaded", () => {
   // Actualizar fecha actual
   const monthNames = [

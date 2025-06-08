@@ -64,7 +64,7 @@ function setupCurrentDate() {
 //         }
 //     })
 // }
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = "https://tfgfinansaludc.onrender.com";
 
 // Cargar presupuestos desde el archivo JSON
 async function loadBudgets() {
