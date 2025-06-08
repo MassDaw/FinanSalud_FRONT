@@ -63,7 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   // Cargar transacciones recientes
-  fetch(`${BASE_URL}/item/currentMonth`)
+  fetch(`${BASE_URL}/item/currentMonth`, {
+    headers: {
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       const allItems = [];

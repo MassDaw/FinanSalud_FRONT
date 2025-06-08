@@ -57,10 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Enviar datos al servidor usando fetch API
     fetch(`${BASE_URL}/api/login`, {
-      method: "POST",
       headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
         "Content-Type": "application/json",
       },
+      method: "POST",
       body: JSON.stringify(formData),
     })
       .then((response) => {

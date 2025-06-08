@@ -69,7 +69,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 // Cargar presupuestos desde el archivo JSON
 async function loadBudgets() {
   try {
-    const response = await fetch(`${BASE_URL}/budget/getAll`);
+    const response = await fetch(`${BASE_URL}/budget/getAll`, {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
+      },
+    });
     if (!response.ok) {
       throw new Error("Error al cargar los presupuestos");
     }
@@ -332,7 +336,7 @@ async function addBudget(event) {
     const response = await fetch(`${BASE_URL}/budget/new`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
       },
       body: JSON.stringify(newBudget),
     });
@@ -387,7 +391,7 @@ async function deleteBudget(name) {
     const response = await fetch(`${BASE_URL}/budget/delete`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
       },
       body: JSON.stringify({ name }),
     });
@@ -412,7 +416,7 @@ async function editBudget(name, newBudgetAmount) {
     const response = await fetch(`${BASE_URL}/budget/edit`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
       },
       body: JSON.stringify({
         name: name,
