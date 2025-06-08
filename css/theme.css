@@ -1642,50 +1642,41 @@ select:focus {
 /* --------------- Login Moderno --------------- */
 .login-container {
   display: flex;
-  align-items: stretch; /* Hace que ambos hijos tengan el mismo alto */
+  align-items: center;
   justify-content: center;
   min-height: 100vh;
   background: var(--light-gray);
   gap: 0;
-  max-width: 800px;
-  margin: 40px auto;
-  border-radius: 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
-  background: var(--light-gray);
 }
 
 .login-image {
-  width: 340px;
-  min-width: 260px;
-  height: 100%;
+  background: none; /* Elimina el fondo azul/degradado */
   border-radius: 24px 0 0 24px;
-  overflow: hidden;
+  padding: 0;
   display: flex;
   align-items: stretch;
   justify-content: stretch;
-  background: none;
-  padding: 0;
+  height: 100%;
+  width: 340px; /* O el ancho que desees para la columna izquierda */
+  overflow: hidden;
 }
 
 .login-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 24px 0 0 24px;
+  width: 260px;
+  max-width: 100%;
   display: block;
 }
 
 .login-form {
   background: var(--white);
   border-radius: 0 24px 24px 0;
-  box-shadow: none;
+  box-shadow: var(--shadow-lg);
   padding: 40px 32px 32px 32px;
   width: 340px;
   min-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 }
 
 .login-form h1 {
