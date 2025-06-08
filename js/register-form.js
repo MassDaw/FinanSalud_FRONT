@@ -46,7 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fetch(`${BASE_URL}/api/register`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(formData),
     })
       .then((response) => response.json())
