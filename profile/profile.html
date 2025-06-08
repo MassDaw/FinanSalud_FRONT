@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,7 +40,12 @@
             Cambiar imagen
           </button>
           <h2 class="profile-name" id="profile-username">Cargando...</h2>
-          <p class="profile-email">anabombardini@gmail.com</p>
+          <div class="email-container">
+            <p class="profile-email" id="profile-email">Cargando...</p>
+            <button class="btn btn-link edit-email-btn" id="edit-email-btn">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
         </div>
 
         <!-- Cards Section -->
@@ -124,14 +129,15 @@
 
     <script>
       // Cargar el header dinámicamente
+      // Cargar el header dinámicamente
       fetch("/header")
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("header-placeholder").innerHTML = data;
           document.getElementById("page-title").textContent =
-            "Tus activos financieros";
+            "Perfil de usuario";
           document.getElementById("page-subtitle").textContent =
-            "Gestiona tus inversiones";
+            "Todo en un solo lugar";
 
           const now = new Date();
           const options = { month: "long", year: "numeric" };
@@ -304,6 +310,51 @@
           document.getElementById("gastos-total").textContent = "Error";
           document.getElementById("ahorro-total").textContent = "Error";
         });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const emailElement = document.getElementById("profile-email");
+        const editEmailBtn = document.getElementById("edit-email-btn");
+
+        // Cargar email inicial
+        fetch("/user/me")
+          .then((response) => response.json())
+          .then((data) => {
+            emailElement.textContent =
+              data.email || "No hay correo configurado";
+          });
+
+        editEmailBtn.addEventListener("click", () => {
+          const currentEmail = emailElement.textContent;
+          const newEmail = prompt(
+            "Introduce el nuevo correo electrónico:",
+            currentEmail
+          );
+
+          if (newEmail && newEmail !== currentEmail) {
+            fetch("/api/user/update-email", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email: newEmail }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  emailElement.textContent = data.email;
+                  alert("Correo electrónico actualizado correctamente");
+                } else {
+                  alert("Error: " + data.message);
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("Error al actualizar el correo electrónico");
+              });
+          }
+        });
+      });
     </script>
   </body>
 </html>
