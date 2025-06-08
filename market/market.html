@@ -104,8 +104,10 @@
     <!-- Scripts -->
     <script src="/js/market.js"></script>
     <script>
+      const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
       // Cargar el header dinámicamente
-      fetch("/header")
+      fetch(`${BASE_URL}/header`)
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("header-placeholder").innerHTML = data;
@@ -131,7 +133,7 @@
 
     <script>
       // Cargar el componente de navegación
-      fetch("/navigation-bar")
+      fetch(`${BASE_URL}/navigation-bar`)
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navigation-container").innerHTML = data;

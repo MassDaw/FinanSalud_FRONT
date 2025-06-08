@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = { username, email, password };
 
-    fetch("/api/register", {
+    fetch(`${BASE_URL}/api/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),

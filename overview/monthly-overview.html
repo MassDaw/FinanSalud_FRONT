@@ -346,8 +346,10 @@
     <div id="navigation-container" class="fixed-bottom"></div>
 
     <script>
+      const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
       // Cargar el componente de navegación
-      fetch("/navigation-bar")
+      fetch(`${BASE_URL}/navigation-bar`)
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navigation-container").innerHTML = data;
@@ -392,17 +394,20 @@
             const notas = document.getElementById("expense-notes").value;
 
             try {
-              const response = await fetch("/item/newItem/" + categoria, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  itemName: nombre,
-                  itemDescription: notas,
-                  itemPrice: cantidad,
-                }),
-              });
+              const response = await fetch(
+                `${BASE_URL}/item/newItem/${categoria}`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    itemName: nombre,
+                    itemDescription: notas,
+                    itemPrice: cantidad,
+                  }),
+                }
+              );
 
               if (!response.ok) {
                 throw new Error("Error en la respuesta del servidor");
@@ -432,17 +437,20 @@
             const notas = document.getElementById("income-notes").value;
 
             try {
-              const response = await fetch("/income/newItem/" + categoria, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  itemName: nombre,
-                  itemDescription: notas,
-                  itemPrice: cantidad,
-                }),
-              });
+              const response = await fetch(
+                `${BASE_URL}/income/newItem/${categoria}`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    itemName: nombre,
+                    itemDescription: notas,
+                    itemPrice: cantidad,
+                  }),
+                }
+              );
 
               if (!response.ok) {
                 throw new Error("Error en la respuesta del servidor");
@@ -464,7 +472,7 @@
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        fetch("/item/currentMonth")
+        fetch(`${BASE_URL}/item/currentMonth`)
           .then((response) => response.json())
           .then((data) => {
             const allItems = [];
@@ -556,7 +564,7 @@
           categorySelect.innerHTML = "";
 
           try {
-            const response = await fetch("/budget/getAllId");
+            const response = await fetch(`${BASE_URL}/budget/getAllId`);
             if (!response.ok) throw new Error("Error al cargar categorías");
             const budgets = await response.json();
             budgets.forEach((budget) => {
