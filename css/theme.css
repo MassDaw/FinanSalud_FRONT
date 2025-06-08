@@ -1642,7 +1642,7 @@ select:focus {
 /* --------------- Login Moderno --------------- */
 .login-container {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   min-height: 100vh;
   background: var(--light-gray);
@@ -1650,18 +1650,22 @@ select:focus {
 }
 
 .login-image {
-  background: linear-gradient(135deg, #e2d9ff 0%, #60a5fa 100%);
+  background: none; /* Elimina el fondo azul/degradado */
   border-radius: 24px 0 0 24px;
-  padding: 40px 30px;
+  padding: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 420px;
+  align-items: stretch;
+  justify-content: stretch;
+  height: 100%;
+  width: 340px; /* O el ancho que desees para la columna izquierda */
+  overflow: hidden;
 }
 
 .login-image img {
-  width: 260px;
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Hace que la imagen cubra todo el espacio */
+  border-radius: 24px 0 0 24px;
   display: block;
 }
 
