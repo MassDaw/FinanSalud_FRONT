@@ -58,18 +58,27 @@ document.addEventListener("DOMContentLoaded", () => {
     // Enviar datos al servidor usando fetch API
     fetch(`${BASE_URL}/api/login`, {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
-        "Content-Type": "application/json",
+       "Content-Type": "application/json",
       },
       method: "POST",
       body: JSON.stringify(formData),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error en la respuesta del servidor");
-        }
-        return response.json();
-      })
+        .then((data) => {
+          if (data.access_token && data.refresh_token) {
+            // Guardar los tokens en localStorage
+            localStorage.setItem("access_token", data.access_token);
+            localStorage.setItem("refresh_token", data.refresh_token);
+
+            // Redireccionar a la página principal si el login es exitoso
+            window.location.href = "/dashboard";
+          } else {
+            // Mostrar mensaje de error si no se reciben los tokens
+            alert(
+                data.message ||
+                "Credenciales incorrectas. Por favor, inténtalo de nuevo."
+            );
+          }
+        })
       .then((data) => {
         if (data.success) {
           // Redireccionar a la página principal si el login es exitoso
