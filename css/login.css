@@ -49,7 +49,11 @@ body {
   background-color: var(--light-gray);
   color: var(--text-color);
   line-height: 1.6;
-  padding-bottom: 70px; /* Un poco más que la altura de la barra para dar espacio extra */
+  padding-bottom: 70px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ========== LAYOUT COMPONENTS ========== */
@@ -57,7 +61,10 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  /* Mantener el padding original */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 /* ========== COMMON COMPONENTS ========== */
@@ -473,13 +480,8 @@ select:focus {
 .market-card h2 {
   font-size: 1.5rem;
   margin-bottom: 5px;
-  color: #fff;
 }
-.table-header h3 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-  color: #fff;
-}
+
 .update-time {
   font-size: 0.85rem;
   margin-bottom: 15px;
@@ -1637,6 +1639,137 @@ select:focus {
   font-size: 0.85rem;
 }
 
+/* --------------- Login Moderno --------------- */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--light-gray);
+  max-width: 900px;
+  /* Quita el borde redondeado del contenedor */
+}
+
+.login-image {
+  width: 380px;
+  border-radius: 24px 0 0 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: slideLeftIn 1s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+
+  background: none;
+}
+
+.login-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px 0 0 24px;
+  display: block;
+  background: transparent;
+}
+
+/* Animación: de derecha a izquierda */
+@keyframes slideLeftIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.login-form h1 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  font-size: 2rem;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 24px;
+  font-size: 1rem;
+}
+
+.input-icon {
+  position: relative;
+}
+
+.input-icon i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+.input-icon input {
+  padding-left: 40px;
+  height: 44px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--medium-gray);
+  font-size: 1rem;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.btn-login:hover {
+  background-color: var(--secondary-dark);
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 18px;
+  color: var(--text-muted);
+}
+
+.register-link {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .login-container {
+    flex-direction: column;
+    gap: 0;
+  }
+  .login-image,
+  .login-form {
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    padding: 32px 16px;
+  }
+  .login-form {
+    border-radius: 0 0 24px 24px;
+  }
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
@@ -1705,7 +1838,6 @@ select:focus {
 /* Mantener la sidebar en desktop */
 @media (min-width: 769px) {
   .container {
-    margin-left: 80px;
     width: calc(100% - 80px);
   }
 }
