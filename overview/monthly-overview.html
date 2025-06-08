@@ -226,8 +226,9 @@
                   >Categoría</label
                 >
                 <select class="form-select" id="income-category" required>
-                  <option selected value="salario">salario</option>
-                  <option selected value="inversion">inversion</option>
+                  <option selected value="salario">Salario</option>
+                  <option selected value="inversion">Inversión</option>
+                  <option selected value="otros">Otros</option>
                 </select>
               </div>
               <div class="mb-3">
@@ -422,7 +423,7 @@
 
         document
           .getElementById("add-income-form")
-          .addEventListener("submit", function (e) {
+          .addEventListener("submit", async function (e) {
             e.preventDefault();
 
             const nombre = document.getElementById("income-title").value;
@@ -430,23 +431,34 @@
             const categoria = document.getElementById("income-category").value;
             const notas = document.getElementById("income-notes").value;
 
-            fetch("/income/newItem/" + categoria, {
-              method: "POST",
-              headers: {
-                "Content\-Type": "application/json",
-              },
-              body: JSON.stringify({
-                itemName: nombre,
-                itemDescription: notas,
-                itemPrice: cantidad,
-              }),
-            })
-              .then((response) => response.text())
-              .then((data) => console.log("Respuesta:", data))
-              .catch((error) => console.error("Error:", error));
+            try {
+              const response = await fetch("/income/newItem/" + categoria, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  itemName: nombre,
+                  itemDescription: notas,
+                  itemPrice: cantidad,
+                }),
+              });
 
-            console.log("Gasto guardado");
-            expenseModal.hide();
+              if (!response.ok) {
+                throw new Error("Error en la respuesta del servidor");
+              }
+
+              // Cerrar el modal de ingreso y limpiar formulario
+              const modal = bootstrap.Modal.getInstance(
+                document.getElementById("income-modal")
+              );
+              modal.hide();
+              this.reset();
+
+              window.location.reload();
+            } catch (error) {
+              console.error("Error:", error);
+            }
           });
       });
     </script>
