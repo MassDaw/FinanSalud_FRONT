@@ -64,11 +64,12 @@ function setupCurrentDate() {
 //         }
 //     })
 // }
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Cargar presupuestos desde el archivo JSON
 async function loadBudgets() {
   try {
-    const response = await fetch("/budget/getAll");
+    const response = await fetch(`${BASE_URL}/budget/getAll`);
     if (!response.ok) {
       throw new Error("Error al cargar los presupuestos");
     }
@@ -328,7 +329,7 @@ async function addBudget(event) {
   };
 
   try {
-    const response = await fetch("/budget/new", {
+    const response = await fetch(`${BASE_URL}/budget/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -383,7 +384,7 @@ async function deleteBudget(name) {
   }
 
   try {
-    const response = await fetch("/budget/delete", {
+    const response = await fetch(`${BASE_URL}/budget/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -408,7 +409,7 @@ async function deleteBudget(name) {
 }
 async function editBudget(name, newBudgetAmount) {
   try {
-    const response = await fetch("/budget/edit", {
+    const response = await fetch(`${BASE_URL}/budget/edit`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

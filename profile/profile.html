@@ -128,9 +128,10 @@
     <div id="navigation-container"></div>
 
     <script>
+      const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
       // Cargar el header dinámicamente
-      // Cargar el header dinámicamente
-      fetch("/header")
+      fetch(`${BASE_URL}/header`)
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("header-placeholder").innerHTML = data;
@@ -161,7 +162,7 @@
           recomendacionDiv.style.display = "block";
           recomendacionDiv.textContent = "Cargando recomendación...";
 
-          fetch("/chat/finanzas")
+          fetch(`${BASE_URL}/chat/finanzas`)
             .then((response) => response.json())
             .then((data) => {
               if (data.response) {
@@ -179,7 +180,7 @@
     </script>
 
     <script>
-      fetch("/user/me")
+      fetch(`${BASE_URL}/user/me`)
         .then((response) => response.json())
         .then((data) => {
           document.getElementById("profile-username").textContent =
@@ -197,7 +198,7 @@
 
     <script>
       // Cargar el componente de navegación
-      fetch("/navigation-bar")
+      fetch(`${BASE_URL}/navigation-bar`)
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navigation-container").innerHTML = data;
@@ -220,7 +221,7 @@
             const formData = new FormData();
             formData.append("file", file);
 
-            fetch("/api/user/upload-profile-pic", {
+            fetch(`${BASE_URL}/api/user/upload-profile-pic`, {
               method: "POST",
               body: formData,
             })
@@ -243,8 +244,10 @@
     <script>
       // Cargar todos los datos financieros
       Promise.all([
-        fetch("/item/currentMonth").then((response) => response.json()),
-        fetch("/budget/getAll").then((response) => response.json()),
+        fetch(`${BASE_URL}/item/currentMonth`).then((response) =>
+          response.json()
+        ),
+        fetch(`${BASE_URL}/budget/getAll`).then((response) => response.json()),
       ])
         .then(([itemData, budgets]) => {
           let totalIngresos = 0;
@@ -317,7 +320,7 @@
         const editEmailBtn = document.getElementById("edit-email-btn");
 
         // Cargar email inicial
-        fetch("/user/me")
+        fetch(`${BASE_URL}/user/me`)
           .then((response) => response.json())
           .then((data) => {
             emailElement.textContent =
@@ -332,7 +335,7 @@
           );
 
           if (newEmail && newEmail !== currentEmail) {
-            fetch("/api/user/update-email", {
+            fetch(`${BASE_URL}/api/user/update-email`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
