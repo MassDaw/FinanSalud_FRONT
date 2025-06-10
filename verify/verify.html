@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div id="verify"></div>
+
+<script>
+  const BASE_URL = "https://tfgfinansaludc.onrender.com";
+  const urlParams = new URLSearchParams(window.location.search);
+
+
+  const tolken = urlParams.get("token");
+  fetch(BASE_URL + "/api/auth/verify?token=" + tolken, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+
+  }).then((response) => {
+    document.getElementById("verify").innerHTML = response.json();
+  })
+</script>
+</body>
+</html>

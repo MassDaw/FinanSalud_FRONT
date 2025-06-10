@@ -21,6 +21,7 @@
       "destination": "navigation-bar/navigation-bar.html"
     },
     { "source": "/footer", "destination": "footer/footer.html" },
-    { "source": "/header", "destination": "header/header.html" }
+    { "source": "/header", "destination": "header/header.html" },
+    { "source": "/verify", "destination": "verify/verify.html" }
   ]
 }
