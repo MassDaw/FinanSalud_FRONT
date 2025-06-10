@@ -131,14 +131,16 @@
     <!--</div>-->
 
     <script>
-      const BASE_URL = "https://tfgfinansaludc.onrender.com";
 
-      // Cargar el componente de navegación
-      fetch(`${BASE_URL}/navigation-bar`)
-        .then((response) => response.text())
-        .then((data) => {
-          document.getElementById("navigation-container").innerHTML = data;
-        });
+      fetch(`/navigation-bar`, {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+              .then((response) => response.text())
+              .then((data) => {
+                document.getElementById("navigation-container").innerHTML = data;
+              });
     </script>
     <script src="/js/header-script.js"></script>
   </body>

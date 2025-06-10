@@ -7,8 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const usernameError = document.getElementById("username-error");
   const passwordError = document.getElementById("password-error");
 
-  // Validación del formulario
   loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
     let isValid = true;
 
     // Validar usuario
@@ -25,29 +26,15 @@ document.addEventListener("DOMContentLoaded", () => {
       isValid = false;
     } else if (passwordInput.value.length < 6) {
       passwordError.textContent =
-        "La contraseña debe tener al menos 6 caracteres";
+          "La contraseña debe tener al menos 6 caracteres";
       isValid = false;
     } else {
       passwordError.textContent = "";
     }
 
-    // Validar correo electrónico (solo en formulario de registro)
-    if (correoInput.value === "") {
-      correoError.textContent =
-        "Por favor, introduce un correo electrónico válido";
-      isValid = false;
-    } else {
-      correoError.textContent = "";
-    }
-
-    // Si hay errores, prevenir el envío del formulario
     if (!isValid) {
-      event.preventDefault();
       return;
     }
-
-    // Si todo está correcto, enviar los datos al servidor
-    event.preventDefault(); // Prevenir el envío normal para usar AJAX
 
     // Crear objeto con los datos del formulario
     const formData = {
@@ -56,15 +43,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Enviar datos al servidor usando fetch API
-    fetch(`${BASE_URL}/api/login`, {
+    fetch(`${BASE_URL}/api/auth/login`, {
       headers: {
-       "Content-Type": "application/json",
+        "Content-Type": "application/json",
       },
       method: "POST",
       body: JSON.stringify(formData),
     })
-        .then((data) => {
-          if (data.access_token && data.refresh_token) {
+        .then(async (response) => {
+          const data = await response.json();
+          if (response.ok && data.access_token && data.refresh_token) {
             // Guardar los tokens en localStorage
             localStorage.setItem("access_token", data.access_token);
             localStorage.setItem("refresh_token", data.refresh_token);
@@ -73,29 +61,15 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "/dashboard";
           } else {
             // Mostrar mensaje de error si no se reciben los tokens
-            alert(
+            passwordError.textContent =
                 data.message ||
-                "Credenciales incorrectas. Por favor, inténtalo de nuevo."
-            );
+                "Credenciales incorrectas. Por favor, inténtalo de nuevo.";
           }
         })
-      .then((data) => {
-        if (data.success) {
-          // Redireccionar a la página principal si el login es exitoso
-          window.location.href = "/dashboard";
-        } else {
-          // Mostrar mensaje de error
-          alert(
-            data.message ||
-              "Credenciales incorrectas. Por favor, inténtalo de nuevo."
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert(
-          "Ha ocurrido un error al intentar iniciar sesión. Por favor, inténtalo de nuevo más tarde."
-        );
-      });
+        .catch((error) => {
+          console.error("Error:", error);
+          passwordError.textContent =
+              "Ha ocurrido un error al intentar iniciar sesión. Por favor, inténtalo de nuevo más tarde.";
+        });
   });
 });

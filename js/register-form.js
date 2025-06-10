@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!email.includes("@")) {
       emailError.textContent =
-        "Por favor, introduce un correo electrónico válido";
+          "Por favor, introduce un correo electrónico válido";
       isValid = false;
     } else {
       emailError.textContent = "";
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (password.length < 6) {
       passwordError.textContent =
-        "La contraseña debe tener al menos 6 caracteres";
+          "La contraseña debe tener al menos 6 caracteres";
       isValid = false;
     } else {
       passwordError.textContent = "";
@@ -44,25 +44,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = { username, email, password };
 
-    fetch(`${BASE_URL}/api/register`, {
+    fetch(`${BASE_URL}/api/auth/register`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/vnd.api+json",
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          alert("Registro exitoso. Ahora puedes iniciar sesión.");
-          window.location.href = "/login";
-        } else {
-          alert(data.message || "Ocurrió un error al registrarse.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("Ocurrió un error al registrar la cuenta. Intenta nuevamente.");
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.access_token && data.refresh_token) {
+            // Guardar los tokens en localStorage
+            localStorage.setItem("access_token", data.access_token);
+            localStorage.setItem("refresh_token", data.refresh_token);
+
+            // Redirigir al dashboard o mostrar mensaje de éxito
+            window.location.href = "/dashboard";
+          } else {
+            alert(data.message || "Ocurrió un error al registrarse.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Ocurrió un error al registrar la cuenta. Intenta nuevamente.");
+        });
   });
 });

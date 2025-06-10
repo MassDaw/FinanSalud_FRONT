@@ -65,13 +65,16 @@ function setupCurrentDate() {
 //     })
 // }
 const BASE_URL = "https://tfgfinansaludc.onrender.com";
+const accessToken = localStorage.getItem("access_token");
+
 
 // Cargar presupuestos desde el archivo JSON
 async function loadBudgets() {
   try {
     const response = await fetch(`${BASE_URL}/budget/getAll`, {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     if (!response.ok) {
@@ -101,9 +104,9 @@ function displayBudgets() {
 
   budgets.forEach((budget) => {
     const percentage =
-      budget.budget > 0
-        ? ((budget.budgetCount / budget.budget) * 100).toFixed(1)
-        : 0;
+        budget.budget > 0
+            ? ((budget.budgetCount / budget.budget) * 100).toFixed(1)
+            : 0;
 
     const budgetElement = document.createElement("div");
     budgetElement.className = "budget-item";
@@ -116,20 +119,20 @@ function displayBudgets() {
             </div>
             <div class="budget-progress">
                 <div class="progress-bar" style="width: ${percentage}%; background-color: ${
-      budget.color
+        budget.color
     }; max-width: 100%"></div>
             </div>
             <div class="budget-footer">
                 <span class="budget-percentage">${percentage}% (${budget.budgetCount.toFixed(
-      2
+        2
     )} €)</span>
                 <div class="budget-actions">
                     <button class="edit-item-btn" data-name="${
-                      budget.name
-                    }"><i class="fas fa-edit"></i></button>
+        budget.name
+    }"><i class="fas fa-edit"></i></button>
                     <button class="delete-item-btn" data-name="${
-                      budget.name
-                    }"><i class="fas fa-trash"></i></button>
+        budget.name
+    }"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         `;
@@ -147,8 +150,8 @@ function displayBudgets() {
         <h3>Total</h3>
         <div class="total-details">
             <span class="total-budget">Presupuesto: ${totalBudget.toFixed(
-              2
-            )} €</span>
+      2
+  )} €</span>
             <span class="total-spent">Gastado: ${totalSpent.toFixed(2)} €</span>
         </div>
     `;
@@ -196,9 +199,9 @@ function getRandomColor(name) {
 
   // Convertir el nombre a minúsculas y sin acentos para la comparación
   const normalizedName = name
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
 
   // Buscar si hay un color predefinido para esta categoría
   for (const [category, color] of Object.entries(categoryColors)) {
@@ -293,7 +296,7 @@ async function addBudget(event) {
 
   const categorySelect = document.getElementById("category");
   const categoryText =
-    categorySelect.options[categorySelect.selectedIndex].text;
+      categorySelect.options[categorySelect.selectedIndex].text;
   const amount = Number.parseFloat(document.getElementById("amount").value);
 
   // Verificar si ya existe un presupuesto con este nombre
@@ -301,11 +304,11 @@ async function addBudget(event) {
   if (existingBudget) {
     // Preguntar al usuario si desea modificar el presupuesto existente
     if (
-      confirm(
-        `Ya existe un presupuesto para "${categoryText}" con un valor de ${existingBudget.budget.toFixed(
-          2
-        )} €. ¿Desea modificarlo?`
-      )
+        confirm(
+            `Ya existe un presupuesto para "${categoryText}" con un valor de ${existingBudget.budget.toFixed(
+                2
+            )} €. ¿Desea modificarlo?`
+        )
     ) {
       // Actualizar directamente el presupuesto existente
       try {
@@ -365,7 +368,7 @@ async function updateBudget(event) {
   if (!currentBudgetId) return;
 
   const amount = Number.parseFloat(
-    document.getElementById("edit-amount").value
+      document.getElementById("edit-amount").value
   );
 
   // Encontrar el presupuesto a actualizar
@@ -440,15 +443,15 @@ async function editBudget(name, newBudgetAmount) {
     if (response.ok) {
       // Actualiza el presupuesto en la lista local
       budgets = budgets.map((b) =>
-        b.name === name ? { ...b, budget: newBudgetAmount } : b
+          b.name === name ? { ...b, budget: newBudgetAmount } : b
       );
       displayBudgets(); // Solo esta línea, sin updateChart()
 
       showNotification("Presupuesto actualizado correctamente", "success");
     } else {
       showNotification(
-        `Error: ${result.message || "Error desconocido"}`,
-        "error"
+          `Error: ${result.message || "Error desconocido"}`,
+          "error"
       );
     }
   } catch (error) {
