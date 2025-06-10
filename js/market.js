@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   // CONECTAR AL WEBSOCKET LOCAL
-  const ws = new WebSocket("ws://localhost:8001/ws");
+  const ws = new WebSocket("ws://localhost:3000/ws");
 
   let cryptoData = null;
   let showOnlyFavorites = false;
