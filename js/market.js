@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const ws = new WebSocket("https://tfgfinansaludc.onrender.com/ws");
+  // const ws = new WebSocket("wss://tfgfinansaludc.onrender.com/ws");
   let cryptoData = null;
   let showOnlyFavorites = false;
   let searchQuery = "";
