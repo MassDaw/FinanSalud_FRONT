@@ -12,17 +12,25 @@ document.addEventListener("DOMContentLoaded", function () {
   async function fetchCryptoData() {
     try {
       console.log("🔄 Obteniendo datos de criptomonedas...");
-      
+
       // Usar un proxy CORS público
-      const proxyUrl = 'https://api.allorigins.win/raw?url=',
-      
+      const proxyUrl = "https://api.allorigins.win/raw?url=";
+
       const [globalResponse, coinsResponse] = await Promise.all([
-        fetch(proxyUrl + encodeURIComponent('https://api.coingecko.com/api/v3/global')),
-        fetch(proxyUrl + encodeURIComponent('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=20&sparkline=false'))
+        fetch(
+          proxyUrl +
+            encodeURIComponent("https://api.coingecko.com/api/v3/global")
+        ),
+        fetch(
+          proxyUrl +
+            encodeURIComponent(
+              "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=20&sparkline=false"
+            )
+        ),
       ]);
 
       if (!globalResponse.ok || !coinsResponse.ok) {
-        throw new Error('Error en la respuesta de la API');
+        throw new Error("Error en la respuesta de la API");
       }
 
       const globalData = await globalResponse.json();
@@ -31,50 +39,56 @@ document.addEventListener("DOMContentLoaded", function () {
       const formatNumber = (number) => {
         if (!number) return "€0.00";
         if (number >= 1_000_000_000) {
-          return `€${(number/1_000_000_000).toFixed(2)}B`;
+          return `€${(number / 1_000_000_000).toFixed(2)}B`;
         } else if (number >= 1_000_000) {
-          return `€${(number/1_000_000).toFixed(2)}M`;
+          return `€${(number / 1_000_000).toFixed(2)}M`;
         } else {
-          return `€${number.toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+          return `€${number.toLocaleString("es-ES", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`;
         }
       };
 
       // Preservar favoritos existentes
-      const existingFavorites = cryptoData?.assets ? 
-        new Set(cryptoData.assets.filter(a => a.isFavorite).map(a => a.id)) : 
-        new Set();
+      const existingFavorites = cryptoData?.assets
+        ? new Set(
+            cryptoData.assets.filter((a) => a.isFavorite).map((a) => a.id)
+          )
+        : new Set();
 
       cryptoData = {
         type: "crypto",
         market: {
           marketCap: formatNumber(globalData?.data?.total_market_cap?.eur || 0),
           volume24h: formatNumber(globalData?.data?.total_volume?.eur || 0),
-          lastUpdated: new Date().toLocaleTimeString('es-ES')
+          lastUpdated: new Date().toLocaleTimeString("es-ES"),
         },
-        assets: (coins || []).map(coin => ({
-          id: coin.id || '',
-          name: coin.name || 'Desconocido',
-          symbol: (coin.symbol || '').toUpperCase(),
+        assets: (coins || []).map((coin) => ({
+          id: coin.id || "",
+          name: coin.name || "Desconocido",
+          symbol: (coin.symbol || "").toUpperCase(),
           price: formatNumber(coin.current_price),
           volume: formatNumber(coin.total_volume),
-          isFavorite: existingFavorites.has(coin.id)
-        }))
+          isFavorite: existingFavorites.has(coin.id),
+        })),
       };
 
       updateUI();
-      console.log(`✅ Datos actualizados: ${cryptoData.assets.length} criptomonedas`);
-
+      console.log(
+        `✅ Datos actualizados: ${cryptoData.assets.length} criptomonedas`
+      );
     } catch (error) {
       console.error("❌ Error obteniendo datos:", error);
-      
+
       // Datos de fallback si todo falla
       if (!cryptoData) {
         cryptoData = {
           type: "crypto",
           market: {
             marketCap: "€2.45T",
-            volume24h: "€89.2B", 
-            lastUpdated: new Date().toLocaleTimeString('es-ES')
+            volume24h: "€89.2B",
+            lastUpdated: new Date().toLocaleTimeString("es-ES"),
           },
           assets: [
             {
@@ -83,25 +97,25 @@ document.addEventListener("DOMContentLoaded", function () {
               symbol: "BTC",
               price: "€65,432.10",
               volume: "€12.3B",
-              isFavorite: false
+              isFavorite: false,
             },
             {
-              id: "ethereum", 
+              id: "ethereum",
               name: "Ethereum",
               symbol: "ETH",
               price: "€3,245.67",
               volume: "€8.7B",
-              isFavorite: false
+              isFavorite: false,
             },
             {
               id: "cardano",
-              name: "Cardano", 
+              name: "Cardano",
               symbol: "ADA",
               price: "€0.42",
               volume: "€245M",
-              isFavorite: false
-            }
-          ]
+              isFavorite: false,
+            },
+          ],
         };
         updateUI();
         console.log("⚠️ Usando datos de fallback");
