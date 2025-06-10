@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   // CONECTAR AL WEBSOCKET LOCAL
-  const ws = new WebSocket("ws://tfgwebsockets-production.up.railway.app/ws");
+  const ws = new WebSocket("wss://tfgwebsockets-production.up.railway.app/ws");
 
   let cryptoData = null;
   let showOnlyFavorites = false;
