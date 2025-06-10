@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // CONECTAR AL WEBSOCKET LOCAL
-  const ws = new WebSocket("ws://localhost:3000/ws");
-
   let cryptoData = null;
   let showOnlyFavorites = false;
   let searchQuery = "";
@@ -10,6 +7,60 @@ document.addEventListener("DOMContentLoaded", function () {
   const favoritesBtn = document.getElementById("favorites-btn");
   const cryptoTableBody = document.getElementById("crypto-table-body");
   const cryptoCountElement = document.getElementById("crypto-count");
+
+  // REEMPLAZAR WEBSOCKET CON API DIRECTA
+  async function fetchCryptoData() {
+    try {
+      console.log("🔄 Obteniendo datos de CoinGecko...");
+
+      const [globalResponse, coinsResponse] = await Promise.all([
+        fetch("https://api.coingecko.com/api/v3/global"),
+        fetch(
+          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=20&sparkline=false"
+        ),
+      ]);
+
+      const globalData = await globalResponse.json();
+      const coins = await coinsResponse.json();
+
+      const formatNumber = (number) => {
+        if (number >= 1_000_000_000) {
+          return `€${(number / 1_000_000_000).toFixed(2)}B`;
+        } else if (number >= 1_000_000) {
+          return `€${(number / 1_000_000).toFixed(2)}M`;
+        } else {
+          return `€${number.toLocaleString()}`;
+        }
+      };
+
+      cryptoData = {
+        type: "crypto",
+        market: {
+          marketCap: formatNumber(globalData.data.total_market_cap.eur),
+          volume24h: formatNumber(globalData.data.total_volume.eur),
+          lastUpdated: new Date().toLocaleTimeString(),
+        },
+        assets: coins.map((coin) => ({
+          id: coin.id,
+          name: coin.name,
+          symbol: coin.symbol.toUpperCase(),
+          price: formatNumber(coin.current_price),
+          volume: formatNumber(coin.total_volume),
+          isFavorite: false,
+        })),
+      };
+
+      updateUI();
+      console.log("✅ Datos actualizados correctamente");
+    } catch (error) {
+      console.error("❌ Error obteniendo datos:", error);
+    }
+  }
+
+  // Cargar datos inicialmente
+  fetchCryptoData();
+  // Actualizar cada 30 segundos
+  setInterval(fetchCryptoData, 30000);
 
   // Configuración de los listeners de eventos
   searchInput.addEventListener("input", (e) => {
@@ -22,50 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
     favoritesBtn.classList.toggle("active", showOnlyFavorites);
     renderCryptoTable();
   });
-
-  // Gestión de la conexión WebSocket
-  ws.onopen = () => {
-    console.log("✅ Conexión WebSocket establecida con servidor local");
-  };
-
-  ws.onclose = () => {
-    console.log("❌ Conexión WebSocket cerrada");
-    // Intentar reconectar cada 5 segundos
-    setTimeout(() => {
-      console.log("🔄 Intentando reconectar...");
-      window.location.reload();
-    }, 5000);
-  };
-
-  ws.onerror = (error) => {
-    console.error("❌ Error en WebSocket:", error);
-  };
-
-  ws.onmessage = (event) => {
-    console.log("📥 Datos recibidos del WebSocket");
-    try {
-      const data = JSON.parse(event.data);
-      console.log("📊 Datos parseados:", data);
-
-      if (data.type === "crypto" && data.market) {
-        // Preservar favoritos existentes
-        if (cryptoData?.assets) {
-          const favorites = new Set(
-            cryptoData.assets.filter((a) => a.isFavorite).map((a) => a.id)
-          );
-          data.assets = data.assets.map((asset) => ({
-            ...asset,
-            isFavorite: favorites.has(asset.id),
-          }));
-        }
-        cryptoData = data;
-        updateUI();
-        console.log("✅ UI actualizada con nuevos datos");
-      }
-    } catch (error) {
-      console.error("❌ Error procesando mensaje:", error);
-    }
-  };
 
   function updateUI() {
     if (!cryptoData || !cryptoData.market) {
