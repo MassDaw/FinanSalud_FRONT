@@ -1,26 +1,5 @@
 {
-  "functions": {
-    "api/auth-middleware.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
-    {
-      "source": "/dashboard",
-      "destination": "/api/auth-middleware?page=dashboard"
-    },
-    {
-      "source": "/profile",
-      "destination": "/api/auth-middleware?page=profile"
-    },
-    {
-      "source": "/monthly-overview",
-      "destination": "/api/auth-middleware?page=monthly-overview"
-    },
-    {
-      "source": "/market",
-      "destination": "/api/auth-middleware?page=market"
-    },
     {
       "source": "/register",
       "destination": "/user_account_registration/user_register.html"
@@ -29,6 +8,13 @@
       "source": "/login",
       "destination": "/user_account_login/user_login.html"
     },
+    { "source": "/dashboard", "destination": "/dashboard/dashboard.html" },
+    { "source": "/profile", "destination": "/profile/profile.html" },
+    {
+      "source": "/monthly-overview",
+      "destination": "/overview/monthly-overview.html"
+    },
+    { "source": "/market", "destination": "/market/market.html" },
     { "source": "/(.*)", "destination": "/$1" },
     {
       "source": "/navigation-bar",
