@@ -20,6 +20,7 @@
       "source": "/navigation-bar",
       "destination": "navigation-bar/navigation-bar.html"
     },
-    { "source": "/footer", "destination": "footer/footer.html" }
+    { "source": "/footer", "destination": "footer/footer.html" },
+    { "source": "/header", "destination": "header/header.html" }
   ]
 }
