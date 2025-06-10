@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Obtener datos de la API y calcular totales
   fetch(`${BASE_URL}/item/currentMonth`, {
-    headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
-      "Content-Type": "application/json",
+      headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
     },
   })
     .then((response) => response.json())
@@ -64,8 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Cargar transacciones recientes
   fetch(`${BASE_URL}/item/currentMonth`, {
-    headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2ODQ1ZTBjNzk5MzhhODdhN2YyZGJjNTAiLCJlbWFpbCI6InBhb2xvaWRydWdvODRAZ21haWwuY29tIiwic3ViIjoiUGFvbG8xMSIsImlhdCI6MTc0OTQyMDc4OSwiZXhwIjoxNzQ5NzgwNzg5fQ.rV1QR7OdVrCFzgT_wxAcM_JMZ-8TdP-eGNQsjnmZvQs`,
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
     },
   })
     .then((response) => response.json())

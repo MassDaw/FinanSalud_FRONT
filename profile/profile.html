@@ -243,6 +243,10 @@
 
             fetch(`${BASE_URL}/api/user/upload-profile-pic`, {
               method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
               body: formData,
             })
               .then((response) => response.json())
@@ -344,7 +348,12 @@
         const editEmailBtn = document.getElementById("edit-email-btn");
 
         // Cargar email inicial
-        fetch(`${BASE_URL}/user/me`)
+        fetch(`${BASE_URL}/user/me`,{
+                headers: {
+          "Content-Type": "application/json",
+                  Authorization: `Bearer ${accessToken}`,
+            },
+        })
           .then((response) => response.json())
           .then((data) => {
             emailElement.textContent =
