@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // CONECTAR AL WEBSOCKET LOCAL
-  const ws = new WebSocket("wss://tfgwebsockets-production.up.railway.app/ws");
-
   let cryptoData = null;
   let showOnlyFavorites = false;
   let searchQuery = "";
@@ -10,6 +7,107 @@ document.addEventListener("DOMContentLoaded", function () {
   const favoritesBtn = document.getElementById("favorites-btn");
   const cryptoTableBody = document.getElementById("crypto-table-body");
   const cryptoCountElement = document.getElementById("crypto-count");
+
+  // FUNCIÓN PARA OBTENER DATOS REALES SIN WEBSOCKET
+  async function fetchCryptoData() {
+    try {
+      console.log("🔄 Obteniendo datos de criptomonedas...");
+      
+      // Usar un proxy CORS público
+      const proxyUrl = 'https://api.allorigins.win/raw?url=',
+      
+      const [globalResponse, coinsResponse] = await Promise.all([
+        fetch(proxyUrl + encodeURIComponent('https://api.coingecko.com/api/v3/global')),
+        fetch(proxyUrl + encodeURIComponent('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=20&sparkline=false'))
+      ]);
+
+      if (!globalResponse.ok || !coinsResponse.ok) {
+        throw new Error('Error en la respuesta de la API');
+      }
+
+      const globalData = await globalResponse.json();
+      const coins = await coinsResponse.json();
+
+      const formatNumber = (number) => {
+        if (!number) return "€0.00";
+        if (number >= 1_000_000_000) {
+          return `€${(number/1_000_000_000).toFixed(2)}B`;
+        } else if (number >= 1_000_000) {
+          return `€${(number/1_000_000).toFixed(2)}M`;
+        } else {
+          return `€${number.toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+      };
+
+      // Preservar favoritos existentes
+      const existingFavorites = cryptoData?.assets ? 
+        new Set(cryptoData.assets.filter(a => a.isFavorite).map(a => a.id)) : 
+        new Set();
+
+      cryptoData = {
+        type: "crypto",
+        market: {
+          marketCap: formatNumber(globalData?.data?.total_market_cap?.eur || 0),
+          volume24h: formatNumber(globalData?.data?.total_volume?.eur || 0),
+          lastUpdated: new Date().toLocaleTimeString('es-ES')
+        },
+        assets: (coins || []).map(coin => ({
+          id: coin.id || '',
+          name: coin.name || 'Desconocido',
+          symbol: (coin.symbol || '').toUpperCase(),
+          price: formatNumber(coin.current_price),
+          volume: formatNumber(coin.total_volume),
+          isFavorite: existingFavorites.has(coin.id)
+        }))
+      };
+
+      updateUI();
+      console.log(`✅ Datos actualizados: ${cryptoData.assets.length} criptomonedas`);
+
+    } catch (error) {
+      console.error("❌ Error obteniendo datos:", error);
+      
+      // Datos de fallback si todo falla
+      if (!cryptoData) {
+        cryptoData = {
+          type: "crypto",
+          market: {
+            marketCap: "€2.45T",
+            volume24h: "€89.2B", 
+            lastUpdated: new Date().toLocaleTimeString('es-ES')
+          },
+          assets: [
+            {
+              id: "bitcoin",
+              name: "Bitcoin",
+              symbol: "BTC",
+              price: "€65,432.10",
+              volume: "€12.3B",
+              isFavorite: false
+            },
+            {
+              id: "ethereum", 
+              name: "Ethereum",
+              symbol: "ETH",
+              price: "€3,245.67",
+              volume: "€8.7B",
+              isFavorite: false
+            },
+            {
+              id: "cardano",
+              name: "Cardano", 
+              symbol: "ADA",
+              price: "€0.42",
+              volume: "€245M",
+              isFavorite: false
+            }
+          ]
+        };
+        updateUI();
+        console.log("⚠️ Usando datos de fallback");
+      }
+    }
+  }
 
   // Configuración de los listeners de eventos
   searchInput.addEventListener("input", (e) => {
@@ -23,67 +121,27 @@ document.addEventListener("DOMContentLoaded", function () {
     renderCryptoTable();
   });
 
-  // Gestión de la conexión WebSocket
-  ws.onopen = () => {
-    console.log("✅ Conexión WebSocket establecida con servidor local");
-  };
-
-  ws.onclose = () => {
-    console.log("❌ Conexión WebSocket cerrada");
-    // Intentar reconectar cada 5 segundos
-    setTimeout(() => {
-      console.log("🔄 Intentando reconectar...");
-      window.location.reload();
-    }, 5000);
-  };
-
-  ws.onerror = (error) => {
-    console.error("❌ Error en WebSocket:", error);
-  };
-
-  ws.onmessage = (event) => {
-    console.log("📥 Datos recibidos del WebSocket");
-    try {
-      const data = JSON.parse(event.data);
-      console.log("📊 Datos parseados:", data);
-
-      if (data.type === "crypto" && data.market) {
-        // Preservar favoritos existentes
-        if (cryptoData?.assets) {
-          const favorites = new Set(
-            cryptoData.assets.filter((a) => a.isFavorite).map((a) => a.id)
-          );
-          data.assets = data.assets.map((asset) => ({
-            ...asset,
-            isFavorite: favorites.has(asset.id),
-          }));
-        }
-        cryptoData = data;
-        updateUI();
-        console.log("✅ UI actualizada con nuevos datos");
-      }
-    } catch (error) {
-      console.error("❌ Error procesando mensaje:", error);
-    }
-  };
-
   function updateUI() {
     if (!cryptoData || !cryptoData.market) {
       console.log("⚠️ No hay datos para mostrar");
       return;
     }
 
-    document.getElementById("crypto-market-cap").textContent =
-      cryptoData.market.marketCap;
-    document.getElementById("crypto-volume").textContent =
-      cryptoData.market.volume24h;
-    document.getElementById("crypto-update-time").textContent =
-      cryptoData.market.lastUpdated;
+    // Verificar que los elementos existen antes de actualizar
+    const marketCapEl = document.getElementById("crypto-market-cap");
+    const volumeEl = document.getElementById("crypto-volume");
+    const updateTimeEl = document.getElementById("crypto-update-time");
+
+    if (marketCapEl) marketCapEl.textContent = cryptoData.market.marketCap;
+    if (volumeEl) volumeEl.textContent = cryptoData.market.volume24h;
+    if (updateTimeEl) updateTimeEl.textContent = cryptoData.market.lastUpdated;
+
     renderCryptoTable();
   }
 
   function renderCryptoTable() {
-    if (!cryptoData || !cryptoData.assets) return;
+    if (!cryptoData || !cryptoData.assets || !cryptoTableBody) return;
+
     const filteredAssets = cryptoData.assets.filter((asset) => {
       const matchesSearch =
         searchQuery === "" ||
@@ -92,7 +150,9 @@ document.addEventListener("DOMContentLoaded", function () {
       return matchesSearch && (!showOnlyFavorites || asset.isFavorite);
     });
 
-    cryptoCountElement.textContent = filteredAssets.length;
+    if (cryptoCountElement) {
+      cryptoCountElement.textContent = filteredAssets.length;
+    }
 
     if (filteredAssets.length === 0) {
       cryptoTableBody.innerHTML =
@@ -143,9 +203,17 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function toggleFavorite(id) {
-    cryptoData.assets = cryptoData.assets.map((asset) =>
-      asset.id === id ? { ...asset, isFavorite: !asset.isFavorite } : asset
-    );
-    renderCryptoTable();
+    if (cryptoData && cryptoData.assets) {
+      cryptoData.assets = cryptoData.assets.map((asset) =>
+        asset.id === id ? { ...asset, isFavorite: !asset.isFavorite } : asset
+      );
+      renderCryptoTable();
+    }
   }
+
+  // Cargar datos inicialmente
+  fetchCryptoData();
+
+  // Actualizar cada 30 segundos
+  setInterval(fetchCryptoData, 30000);
 });
