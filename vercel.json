@@ -5,7 +5,7 @@
       "destination": "/user_account_registration/user_register.html"
     },
     {
-      "source": "/login",
+      "source": "/",
       "destination": "/user_account_login/user_login.html"
     },
     { "source": "/dashboard", "destination": "/dashboard/dashboard.html" },
