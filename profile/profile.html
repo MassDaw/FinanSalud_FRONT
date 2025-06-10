@@ -355,6 +355,7 @@
 
         // Cargar email inicial
         fetch(`${BASE_URL}/user/me`,{
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
