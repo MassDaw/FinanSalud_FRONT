@@ -131,16 +131,12 @@
     <!--</div>-->
 
     <script>
-
       fetch(`/navigation-bar`, {
         headers: {
           "Content-Type": "application/json",
         }
-      })
-              .then((response) => response.text())
-              .then((data) => {
-                document.getElementById("navigation-container").innerHTML = data;
-              });
+      }).then((response) => response.text())
+              .then((data) => {document.getElementById("navigation-container").innerHTML = data;});
     </script>
     <script src="/js/header-script.js"></script>
   </body>

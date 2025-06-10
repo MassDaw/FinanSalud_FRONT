@@ -162,7 +162,13 @@
           recomendacionDiv.style.display = "block";
           recomendacionDiv.textContent = "Cargando recomendación...";
 
-          fetch(`${BASE_URL}/chat/finanzas`)
+          fetch(`${BASE_URL}/chat/finanzas`,{
+            Method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            }
+          })
             .then((response) => response.json())
             .then((data) => {
               if (data.response) {
@@ -180,7 +186,13 @@
     </script>
 
     <script>
-      fetch(`${BASE_URL}/user/me`)
+      fetch(`${BASE_URL}/user/me`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+      })
         .then((response) => response.json())
         .then((data) => {
           document.getElementById("profile-username").textContent =
@@ -197,12 +209,12 @@
     </script>
 
     <script>
-      // Cargar el componente de navegación
-      fetch(`${BASE_URL}/navigation-bar`)
-        .then((response) => response.text())
-        .then((data) => {
-          document.getElementById("navigation-container").innerHTML = data;
-        });
+      fetch(`/navigation-bar`, {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }).then((response) => response.text())
+              .then((data) => {document.getElementById("navigation-container").innerHTML = data;});
     </script>
 
     <script>
@@ -244,7 +256,13 @@
     <script>
       // Cargar todos los datos financieros
       Promise.all([
-        fetch(`${BASE_URL}/item/currentMonth`).then((response) =>
+        fetch(`${BASE_URL}/item/currentMonth`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+        }).then((response) =>
           response.json()
         ),
         fetch(`${BASE_URL}/budget/getAll`).then((response) => response.json()),

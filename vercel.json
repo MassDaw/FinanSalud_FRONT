@@ -10,7 +10,7 @@
     },
     { "source": "/dashboard", "destination": "/dashboard/dashboard.html" },
     { "source": "/profile", "destination": "/profile/profile.html" },
-    { "source": "/overview", "destination": "/overview/monthly-overview.html" },
+    { "source": "/monthly-overview", "destination": "/overview/monthly-overview.html" },
     { "source": "/market", "destination": "/market/market.html" },
     { "source": "/(.*)", "destination": "/$1" },
     { "source": "/navigation-bar","destination": "navigation-bar/navigation-bar.html" },

@@ -1,586 +1,604 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Resumen Mensual</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/css/theme.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <style>
-      /* Estilos personalizados para los botones sin Bootstrap */
-      .custom-buttons-container {
-        display: flex;
-        margin-bottom: 1.5rem;
-        gap: 10px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resumen Mensual</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/theme.css" />
+  <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+  />
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+  <style>
+    /* Estilos personalizados para los botones sin Bootstrap */
+    .custom-buttons-container {
+      display: flex;
+      margin-bottom: 1.5rem;
+      gap: 10px;
+    }
 
-      .custom-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 16px;
-        border-radius: 8px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        border: none;
-        font-size: 0.9rem;
-      }
+    .custom-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      font-size: 0.9rem;
+    }
 
-      .custom-button i {
-        margin-right: 8px;
-      }
+    .custom-button i {
+      margin-right: 8px;
+    }
 
-      .income-button {
-        background-color: #10b981;
-        color: white;
-      }
+    .income-button {
+      background-color: #10b981;
+      color: white;
+    }
 
-      .income-button:hover {
-        background-color: #059669;
-      }
+    .income-button:hover {
+      background-color: #059669;
+    }
 
-      .expense-button {
-        background-color: #ef4444;
-        color: white;
-      }
+    .expense-button {
+      background-color: #ef4444;
+      color: white;
+    }
 
-      .expense-button:hover {
-        background-color: #dc2626;
-      }
-      .custom-card .card {
-        transition: transform 0.3s ease; /* Hace que la animación sea suave */
-      }
+    .expense-button:hover {
+      background-color: #dc2626;
+    }
+    .custom-card .card {
+      transition: transform 0.3s ease; /* Hace que la animación sea suave */
+    }
 
-      .custom-card .card:hover {
-        transform: translateY(
-          -5px
-        ); /* Mueve el contenedor de la tarjeta hacia arriba */
-      }
-    </style>
-  </head>
-  <body class="bg-light">
-    <div class="container py-4">
-      <header
-        class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom"
-      >
-        <div class="d-flex align-items-center">
-          <div class="me-3">
-            <img
-              src="/images/profile-pic.jpg"
-              alt="Foto de perfil"
-              class="rounded-circle"
-              style="width: 50px; height: 50px; object-fit: cover"
-            />
+    .custom-card .card:hover {
+      transform: translateY(
+              -5px
+      ); /* Mueve el contenedor de la tarjeta hacia arriba */
+    }
+  </style>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+  <header
+          class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom"
+  >
+    <div class="d-flex align-items-center">
+      <div class="me-3">
+        <img
+                src="/images/profile-pic.jpg"
+                alt="Foto de perfil"
+                class="rounded-circle"
+                style="width: 50px; height: 50px; object-fit: cover"
+        />
+      </div>
+      <div>
+        <h1 class="h3 mb-0 text-primary">Vista mensual</h1>
+        <p class="text-muted small mb-0">
+          Lleva tus finanzas sin que se escape nada
+        </p>
+      </div>
+    </div>
+    <div class="d-flex align-items-center">
+      <span id="current-month" class="me-2 fw-bold">Marzo 2025</span>
+      <button class="btn btn-outline-secondary btn-sm rounded-circle">
+        <i class="fas fa-calendar"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="row g-4 mb-5 custom-card">
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body d-flex" id="card-body">
+          <div
+                  class="rounded-circle bg-light p-3 me-3 d-flex align-items-center justify-content-center"
+                  style="width: 60px; height: 60px"
+          >
+            <i class="fas fa-wallet text-primary fa-lg"></i>
           </div>
           <div>
-            <h1 class="h3 mb-0 text-primary">Vista mensual</h1>
-            <p class="text-muted small mb-0">
-              Lleva tus finanzas sin que se escape nada
-            </p>
-          </div>
-        </div>
-        <div class="d-flex align-items-center">
-          <span id="current-month" class="me-2 fw-bold">Marzo 2025</span>
-          <button class="btn btn-outline-secondary btn-sm rounded-circle">
-            <i class="fas fa-calendar"></i>
-          </button>
-        </div>
-      </header>
-
-      <div class="row g-4 mb-5 custom-card">
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body d-flex" id="card-body">
-              <div
-                class="rounded-circle bg-light p-3 me-3 d-flex align-items-center justify-content-center"
-                style="width: 60px; height: 60px"
-              >
-                <i class="fas fa-wallet text-primary fa-lg"></i>
-              </div>
-              <div>
-                <h6 class="text-muted mb-1">Balance Total</h6>
-                <h3 class="mb-1" id="balanceTotal">€2,450.75</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 custom-card">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body d-flex">
-              <div
-                class="rounded-circle bg-success bg-opacity-10 p-3 me-3 d-flex align-items-center justify-content-center"
-                style="width: 60px; height: 60px"
-              >
-                <i class="fas fa-arrow-up text-success fa-lg"></i>
-              </div>
-              <div>
-                <h6 class="text-muted mb-1">Ingresos Totales</h6>
-                <h3 class="mb-1" id="ingresosTotales">€3,850.00</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4 custom-card">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body d-flex">
-              <div
-                class="rounded-circle bg-danger bg-opacity-10 p-3 me-3 d-flex align-items-center justify-content-center"
-                style="width: 60px; height: 60px"
-              >
-                <i class="fas fa-arrow-down text-danger fa-lg"></i>
-              </div>
-              <div>
-                <h6 class="text-muted mb-1">Gastos Totales</h6>
-                <h3 class="mb-1" id="gastosTotales">€1,399.25</h3>
-              </div>
-            </div>
+            <h6 class="text-muted mb-1">Balance Total</h6>
+            <h3 class="mb-1" id="balanceTotal">€2,450.75</h3>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Tarjeta de transacciones recientes -->
+    <div class="col-md-4 custom-card">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body d-flex">
+          <div
+                  class="rounded-circle bg-success bg-opacity-10 p-3 me-3 d-flex align-items-center justify-content-center"
+                  style="width: 60px; height: 60px"
+          >
+            <i class="fas fa-arrow-up text-success fa-lg"></i>
+          </div>
+          <div>
+            <h6 class="text-muted mb-1">Ingresos Totales</h6>
+            <h3 class="mb-1" id="ingresosTotales">€3,850.00</h3>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <!-- Botones personalizados para añadir ingresos y gastos (sin Bootstrap) -->
-      <div class="custom-buttons-container">
-        <button id="add-income" class="custom-button income-button">
-          <i class="fas fa-plus"></i> Añadir Ingreso
-        </button>
-        <button id="add-expense" class="custom-button expense-button">
-          <i class="fas fa-minus"></i> Añadir Gasto
+    <div class="col-md-4 custom-card">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body d-flex">
+          <div
+                  class="rounded-circle bg-danger bg-opacity-10 p-3 me-3 d-flex align-items-center justify-content-center"
+                  style="width: 60px; height: 60px"
+          >
+            <i class="fas fa-arrow-down text-danger fa-lg"></i>
+          </div>
+          <div>
+            <h6 class="text-muted mb-1">Gastos Totales</h6>
+            <h3 class="mb-1" id="gastosTotales">€1,399.25</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjeta de transacciones recientes -->
+
+  <!-- Botones personalizados para añadir ingresos y gastos (sin Bootstrap) -->
+  <div class="custom-buttons-container">
+    <button id="add-income" class="custom-button income-button">
+      <i class="fas fa-plus"></i> Añadir Ingreso
+    </button>
+    <button id="add-expense" class="custom-button expense-button">
+      <i class="fas fa-minus"></i> Añadir Gasto
+    </button>
+  </div>
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="card-title mb-0">Transacciones Recientes</h5>
+        <button class="btn btn-sm btn-link text-decoration-none">
+          Ver todas
         </button>
       </div>
-      <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="card-title mb-0">Transacciones Recientes</h5>
-            <button class="btn btn-sm btn-link text-decoration-none">
-              Ver todas
+      <div
+              class="list-group list-group-flush"
+              id="recent-transactions-list"
+      >
+        <!-- Aquí se insertarán las transacciones reales -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modales para añadir ingresos y gastos (mantenidos con Bootstrap) -->
+<div
+        class="modal fade"
+        id="income-modal"
+        tabindex="-1"
+        aria-labelledby="incomeModalLabel"
+        aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="incomeModalLabel">Añadir Ingreso</h5>
+        <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="add-income-form">
+          <div class="mb-3">
+            <label for="income-title" class="form-label">Título</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="income-title"
+                    required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="income-amount" class="form-label"
+            >Cantidad (€)</label
+            >
+            <input
+                    type="number"
+                    class="form-control"
+                    id="income-amount"
+                    min="0"
+                    step="0.01"
+                    required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="income-category" class="form-label"
+            >Categoría</label
+            >
+            <select class="form-select" id="income-category" required>
+              <option selected value="salario">Salario</option>
+              <option selected value="inversion">Inversión</option>
+              <option selected value="otros">Otros</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="income-notes" class="form-label"
+            >Notas (opcional)</label
+            >
+            <textarea
+                    class="form-control"
+                    id="income-notes"
+                    rows="3"
+            ></textarea>
+          </div>
+          <div class="text-end">
+            <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-success ms-2">
+              Guardar
             </button>
           </div>
-          <div
-            class="list-group list-group-flush"
-            id="recent-transactions-list"
-          >
-            <!-- Aquí se insertarán las transacciones reales -->
-          </div>
-        </div>
+        </form>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Modales para añadir ingresos y gastos (mantenidos con Bootstrap) -->
-    <div
-      class="modal fade"
-      id="income-modal"
-      tabindex="-1"
-      aria-labelledby="incomeModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-success text-white">
-            <h5 class="modal-title" id="incomeModalLabel">Añadir Ingreso</h5>
+<div
+        class="modal fade"
+        id="expense-modal"
+        tabindex="-1"
+        aria-labelledby="expenseModalLabel"
+        aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="expenseModalLabel">Añadir Gasto</h5>
+        <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="add-expense-form">
+          <div class="mb-3">
+            <label for="expense-title" class="form-label">Título</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="expense-title"
+                    required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="expense-amount" class="form-label"
+            >Cantidad (€)</label
+            >
+            <input
+                    type="number"
+                    class="form-control"
+                    id="expense-amount"
+                    min="0"
+                    step="0.01"
+                    required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="expense-category" class="form-label"
+            >Categoría</label
+            >
+            <select
+                    class="form-select"
+                    id="expense-category"
+                    required
+            ></select>
+          </div>
+          <div class="mb-3">
+            <label for="expense-notes" class="form-label"
+            >Notas (opcional)</label
+            >
+            <textarea
+                    class="form-control"
+                    id="expense-notes"
+                    rows="3"
+            ></textarea>
+          </div>
+          <div class="text-end">
             <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-danger ms-2">
+              Guardar
+            </button>
           </div>
-          <div class="modal-body">
-            <form id="add-income-form">
-              <div class="mb-3">
-                <label for="income-title" class="form-label">Título</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="income-title"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="income-amount" class="form-label"
-                  >Cantidad (€)</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="income-amount"
-                  min="0"
-                  step="0.01"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="income-category" class="form-label"
-                  >Categoría</label
-                >
-                <select class="form-select" id="income-category" required>
-                  <option selected value="salario">Salario</option>
-                  <option selected value="inversion">Inversión</option>
-                  <option selected value="otros">Otros</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="income-notes" class="form-label"
-                  >Notas (opcional)</label
-                >
-                <textarea
-                  class="form-control"
-                  id="income-notes"
-                  rows="3"
-                ></textarea>
-              </div>
-              <div class="text-end">
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Cancelar
-                </button>
-                <button type="submit" class="btn btn-success ms-2">
-                  Guardar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
+  </div>
+</div>
 
-    <div
-      class="modal fade"
-      id="expense-modal"
-      tabindex="-1"
-      aria-labelledby="expenseModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-danger text-white">
-            <h5 class="modal-title" id="expenseModalLabel">Añadir Gasto</h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="add-expense-form">
-              <div class="mb-3">
-                <label for="expense-title" class="form-label">Título</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="expense-title"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="expense-amount" class="form-label"
-                  >Cantidad (€)</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="expense-amount"
-                  min="0"
-                  step="0.01"
-                  required
-                />
-              </div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/monthly-overview-script.js"></script>
+<div id="navigation-container" class="fixed-bottom"></div>
 
-              <div class="mb-3">
-                <label for="expense-category" class="form-label"
-                  >Categoría</label
-                >
-                <select
-                  class="form-select"
-                  id="expense-category"
-                  required
-                ></select>
-              </div>
-              <div class="mb-3">
-                <label for="expense-notes" class="form-label"
-                  >Notas (opcional)</label
-                >
-                <textarea
-                  class="form-control"
-                  id="expense-notes"
-                  rows="3"
-                ></textarea>
-              </div>
-              <div class="text-end">
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Cancelar
-                </button>
-                <button type="submit" class="btn btn-danger ms-2">
-                  Guardar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+document.getElementById("navigation-container").innerHTML = data;});
+</script>
+<script>
+  const BASE_URL = "https://tfgfinansaludc.onrender.com";
+  const accessToken = localStorage.getItem("access_token");
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/monthly-overview-script.js"></script>
-    <div id="navigation-container" class="fixed-bottom"></div>
 
-    <script>
-      const BASE_URL = "https://tfgfinansaludc.onrender.com";
-
-      // Cargar el componente de navegación
-      fetch(`${BASE_URL}/navigation-bar`)
-        .then((response) => response.text())
-        .then((data) => {
-          document.getElementById("navigation-container").innerHTML = data;
-          // Initialize navigation-bar.js after the content is loaded
-          const script = document.createElement("script");
-          script.src = "/js/navigation-bar.js";
-          document.body.appendChild(script);
-        });
-
-      // Funcionalidad para los botones de añadir ingreso y gasto
-      document.addEventListener("DOMContentLoaded", function () {
-        const addIncomeBtn = document.getElementById("add-income");
-        const addExpenseBtn = document.getElementById("add-expense");
-
-        // Inicializar los modales de Bootstrap
-        const incomeModal = new bootstrap.Modal(
-          document.getElementById("income-modal")
-        );
-        const expenseModal = new bootstrap.Modal(
-          document.getElementById("expense-modal")
-        );
-
-        // Mostrar modal al hacer clic en los botones
-        addIncomeBtn.addEventListener("click", function () {
-          incomeModal.show();
-        });
-
-        addExpenseBtn.addEventListener("click", function () {
-          expenseModal.show();
-        });
-
-        document
-          .getElementById("add-expense-form")
-          .addEventListener("submit", async function (e) {
-            e.preventDefault();
-
-            const nombre = document.getElementById("expense-title").value;
-            const cantidad = Math.abs(
-              parseFloat(document.getElementById("expense-amount").value)
-            ); // Siempre positivo
-            const categoria = document.getElementById("expense-category").value; // <-- Añade esta línea
-            const notas = document.getElementById("expense-notes").value;
-
-            try {
-              const response = await fetch(
-                `${BASE_URL}/item/newItem/${categoria}`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    itemName: nombre,
-                    itemDescription: notas,
-                    itemPrice: cantidad,
-                  }),
-                }
-              );
-
-              if (!response.ok) {
-                throw new Error("Error en la respuesta del servidor");
-              }
-
-              // Cerrar el modal y limpiar formulario
-              const modal = bootstrap.Modal.getInstance(
-                document.getElementById("expense-modal")
-              );
-              modal.hide();
-              this.reset();
-
-              window.location.reload();
-            } catch (error) {
-              console.error("Error:", error);
-            }
+    fetch(`/navigation-bar`, {
+    headers: {
+    "Content-Type": "application/json",
+  }
+  }).then((response) => response.text())
+    .then((data) => {
+            document.getElementById("navigation-container").innerHTML = data;
+            // Initialize navigation-bar.js after the content is loaded
+            const script = document.createElement("script");
+            script.src = "/js/navigation-bar.js";
+            document.body.appendChild(script);
           });
 
-        document
-          .getElementById("add-income-form")
-          .addEventListener("submit", async function (e) {
-            e.preventDefault();
+  // Funcionalidad para los botones de añadir ingreso y gasto
+  document.addEventListener("DOMContentLoaded", function () {
+    const addIncomeBtn = document.getElementById("add-income");
+    const addExpenseBtn = document.getElementById("add-expense");
 
-            const nombre = document.getElementById("income-title").value;
-            const cantidad = document.getElementById("income-amount").value;
-            const categoria = document.getElementById("income-category").value;
-            const notas = document.getElementById("income-notes").value;
+    // Inicializar los modales de Bootstrap
+    const incomeModal = new bootstrap.Modal(
+            document.getElementById("income-modal")
+    );
+    const expenseModal = new bootstrap.Modal(
+            document.getElementById("expense-modal")
+    );
 
-            try {
-              const response = await fetch(
-                `${BASE_URL}/income/newItem/${categoria}`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    itemName: nombre,
-                    itemDescription: notas,
-                    itemPrice: cantidad,
-                  }),
+    // Mostrar modal al hacer clic en los botones
+    addIncomeBtn.addEventListener("click", function () {
+      incomeModal.show();
+    });
+
+    addExpenseBtn.addEventListener("click", function () {
+      expenseModal.show();
+    });
+
+    document
+            .getElementById("add-expense-form")
+            .addEventListener("submit", async function (e) {
+              e.preventDefault();
+
+              const nombre = document.getElementById("expense-title").value;
+              const cantidad = Math.abs(
+                      parseFloat(document.getElementById("expense-amount").value)
+              ); // Siempre positivo
+              const categoria = document.getElementById("expense-category").value; // <-- Añade esta línea
+              const notas = document.getElementById("expense-notes").value;
+
+              try {
+                const response = await fetch(
+                        `${BASE_URL}/item/newItem/${categoria}`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${accessToken}`,
+                          },
+                          body: JSON.stringify({
+                            itemName: nombre,
+                            itemDescription: notas,
+                            itemPrice: cantidad,
+                          }),
+                        }
+                );
+
+                if (!response.ok) {
+                  throw new Error("Error en la respuesta del servidor");
                 }
-              );
 
-              if (!response.ok) {
-                throw new Error("Error en la respuesta del servidor");
+                // Cerrar el modal y limpiar formulario
+                const modal = bootstrap.Modal.getInstance(
+                        document.getElementById("expense-modal")
+                );
+                modal.hide();
+                this.reset();
+
+                window.location.reload();
+              } catch (error) {
+                console.error("Error:", error);
+              }
+            });
+
+    document
+            .getElementById("add-income-form")
+            .addEventListener("submit", async function (e) {
+              e.preventDefault();
+
+              const nombre = document.getElementById("income-title").value;
+              const cantidad = document.getElementById("income-amount").value;
+              const categoria = document.getElementById("income-category").value;
+              const notas = document.getElementById("income-notes").value;
+
+              try {
+                const response = await fetch(
+                        `${BASE_URL}/income/newItem/${categoria}`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${accessToken}`,
+                          },
+                          body: JSON.stringify({
+                            itemName: nombre,
+                            itemDescription: notas,
+                            itemPrice: cantidad,
+                          }),
+                        }
+                );
+
+                if (!response.ok) {
+                  throw new Error("Error en la respuesta del servidor");
+                }
+
+                // Cerrar el modal de ingreso y limpiar formulario
+                const modal = bootstrap.Modal.getInstance(
+                        document.getElementById("income-modal")
+                );
+                modal.hide();
+                this.reset();
+
+                window.location.reload();
+              } catch (error) {
+                console.error("Error:", error);
+              }
+            });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch(`${BASE_URL}/item/currentMonth`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+            .then((response) => response.json())
+            .then((data) => {
+              const allItems = [];
+
+              // 🔁 Recorre cada categoría y sus ítems
+              for (const [category, items] of Object.entries(data)) {
+                items.forEach((item) => {
+                  item.category = category; // ➕ agrega la categoría a cada item
+                  allItems.push(item);
+                });
               }
 
-              // Cerrar el modal de ingreso y limpiar formulario
-              const modal = bootstrap.Modal.getInstance(
-                document.getElementById("income-modal")
+              const container = document.getElementById(
+                      "recent-transactions-list"
               );
-              modal.hide();
-              this.reset();
+              container.innerHTML = "";
 
-              window.location.reload();
-            } catch (error) {
-              console.error("Error:", error);
-            }
-          });
-      });
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch(`${BASE_URL}/item/currentMonth`)
-          .then((response) => response.json())
-          .then((data) => {
-            const allItems = [];
+              const filteredItems = allItems.filter(
+                      (item) => item && item.itemName && item.itemPrice !== undefined
+              );
 
-            // 🔁 Recorre cada categoría y sus ítems
-            for (const [category, items] of Object.entries(data)) {
-              items.forEach((item) => {
-                item.category = category; // ➕ agrega la categoría a cada item
-                allItems.push(item);
-              });
-            }
-
-            const container = document.getElementById(
-              "recent-transactions-list"
-            );
-            container.innerHTML = "";
-
-            const filteredItems = allItems.filter(
-              (item) => item && item.itemName && item.itemPrice !== undefined
-            );
-
-            if (filteredItems.length === 0) {
-              container.innerHTML = `
+              if (filteredItems.length === 0) {
+                container.innerHTML = `
                 <div class="text-center text-muted py-3">
                     <i class="fas fa-info-circle mb-2"></i>
                     <p>No hay transacciones recientes</p>
                 </div>
             `;
-              return;
-            }
+                return;
+              }
 
-            filteredItems.slice(0, 5).forEach((item) => {
-              container.innerHTML += `
+              filteredItems.slice(0, 5).forEach((item) => {
+                container.innerHTML += `
                 <div class="list-group-item d-flex align-items-center py-3 px-0">
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="mb-0">${item.itemName}</h6>
                                 <p class="text-muted small mb-0">${
-                                  item.category
-                                } ${
-                item.itemDescription ? `– ${item.itemDescription}` : ""
-              }</p>
+                        item.category
+                } ${
+                        item.itemDescription ? `– ${item.itemDescription}` : ""
+                }</p>
                             </div>
                             <div class="fw-bold">€${parseFloat(
-                              item.itemPrice
-                            ).toFixed(2)}</div>
+                        item.itemPrice
+                ).toFixed(2)}</div>
                         </div>
                     </div>
                 </div>
             `;
-            });
-          })
-          .catch((error) => {
-            console.error("Error al cargar transacciones:", error);
-            const container = document.getElementById(
-              "recent-transactions-list"
-            );
-            container.innerHTML = `
+              });
+            })
+            .catch((error) => {
+              console.error("Error al cargar transacciones:", error);
+              const container = document.getElementById(
+                      "recent-transactions-list"
+              );
+              container.innerHTML = `
             <div class="text-center text-muted py-3">
                 <i class="fas fa-exclamation-circle mb-2"></i>
                 <p>No se pudieron cargar las transacciones</p>
             </div>
         `;
-          })
-          .catch((error) => {
-            console.error("Error al cargar transacciones:", error);
-            const container = document.getElementById(
-              "recent-transactions-list"
-            );
-            container.innerHTML = `
+            })
+            .catch((error) => {
+              console.error("Error al cargar transacciones:", error);
+              const container = document.getElementById(
+                      "recent-transactions-list"
+              );
+              container.innerHTML = `
                 <div class="text-center text-muted py-3">
                     <i class="fas fa-exclamation-circle mb-2"></i>
                     <p>No se pudieron cargar las transacciones</p>
                 </div>
             `;
-          });
-      });
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const addExpenseBtn = document.getElementById("add-expense");
-        const expenseModal = new bootstrap.Modal(
-          document.getElementById("expense-modal")
-        );
-
-        addExpenseBtn.addEventListener("click", async function () {
-          const categorySelect = document.getElementById("expense-category");
-          categorySelect.innerHTML = "";
-
-          try {
-            const response = await fetch(`${BASE_URL}/budget/getAllId`);
-            if (!response.ok) throw new Error("Error al cargar categorías");
-            const budgets = await response.json();
-            budgets.forEach((budget) => {
-              const option = document.createElement("option");
-              option.value = budget.id; // Usa el id como value
-              option.textContent = budget.categoria || budget.name; // Usa la propiedad correcta para mostrar
-              categorySelect.appendChild(option);
             });
-          } catch (error) {
-            console.error("No se pudieron cargar las categorías:", error);
-          }
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const addExpenseBtn = document.getElementById("add-expense");
+    const expenseModal = new bootstrap.Modal(
+            document.getElementById("expense-modal")
+    );
 
-          expenseModal.show();
+    addExpenseBtn.addEventListener("click", async function () {
+      const categorySelect = document.getElementById("expense-category");
+      categorySelect.innerHTML = "";
+
+      try {
+        const response = await fetch(`${BASE_URL}/budget/getAllId`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
         });
-      });
-    </script>
-    <script src="/js/header-script.js"></script>
-  </body>
+        if (!response.ok) throw new Error("Error al cargar categorías");
+        const budgets = await response.json();
+        budgets.forEach((budget) => {
+          const option = document.createElement("option");
+          option.value = budget.id; // Usa el id como value
+          option.textContent = budget.categoria || budget.name; // Usa la propiedad correcta para mostrar
+          categorySelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error("No se pudieron cargar las categorías:", error);
+      }
+
+      expenseModal.show();
+    });
+  });
+</script>
+<script src="/js/header-script.js"></script>
+</body>
 </html>
