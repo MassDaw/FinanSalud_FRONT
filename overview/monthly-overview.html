@@ -482,6 +482,7 @@
   });
 </script>
 <script>
+  const BASE_URL = "https://tfgfinansaludc.onrender.com";
   document.addEventListener("DOMContentLoaded", function () {
     fetch(`${BASE_URL}/item/currentMonth`, {
       headers: {
@@ -580,12 +581,13 @@
       categorySelect.innerHTML = "";
 
       try {
-        const response = await fetch(`${BASE_URL}/budget/getAllId`, {
+        const response = await fetch(`${BASE_URL}/item/currentMonth`, {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-        });
+        })
         if (!response.ok) throw new Error("Error al cargar categorías");
         const budgets = await response.json();
         budgets.forEach((budget) => {
