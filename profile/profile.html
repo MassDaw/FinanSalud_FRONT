@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="es" xmlns="http://www.w3.org/1999/html">
   <head>
+    <script>
+      if (!localStorage.getItem("access_token")) {
+        window.location.href = "/login";
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FinanSalud - Perfil</title>
@@ -162,12 +167,12 @@
           recomendacionDiv.style.display = "block";
           recomendacionDiv.textContent = "Cargando recomendación...";
 
-          fetch(`${BASE_URL}/chat/finanzas`,{
+          fetch(`${BASE_URL}/chat/finanzas`, {
             Method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${accessToken}`,
-            }
+            },
           })
             .then((response) => response.json())
             .then((data) => {
@@ -186,12 +191,12 @@
     </script>
 
     <script>
-      fetch(`${BASE_URL}/user/me`,{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
+      fetch(`${BASE_URL}/user/me`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       })
         .then((response) => response.json())
         .then((data) => {
@@ -212,9 +217,12 @@
       fetch(`/navigation-bar`, {
         headers: {
           "Content-Type": "application/json",
-        }
-      }).then((response) => response.text())
-              .then((data) => {document.getElementById("navigation-container").innerHTML = data;});
+        },
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navigation-container").innerHTML = data;
+        });
     </script>
 
     <script>
@@ -256,15 +264,13 @@
     <script>
       // Cargar todos los datos financieros
       Promise.all([
-        fetch(`${BASE_URL}/item/currentMonth`,{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-        }).then((response) =>
-          response.json()
-        ),
+        fetch(`${BASE_URL}/item/currentMonth`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }).then((response) => response.json()),
         fetch(`${BASE_URL}/budget/getAll`).then((response) => response.json()),
       ])
         .then(([itemData, budgets]) => {

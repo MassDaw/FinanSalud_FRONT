@@ -1,149 +1,157 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard Financiero</title>
-  <link rel="stylesheet" href="/css/theme.css" />
+  <head>
+    <script>
+      if (!localStorage.getItem("access_token")) {
+        window.location.href = "/login";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Financiero</title>
+    <link rel="stylesheet" href="/css/theme.css" />
 
-  <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-  />
-  <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-  />
-</head>
-<body>
-<!-- Contenedor para el header -->
-<div id="header-placeholder"></div>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Contenedor para el header -->
+    <div id="header-placeholder"></div>
 
-<div class="container">
-  <div class="market-cards">
-    <!-- Tarjeta de Mercado de Criptomonedas -->
-    <div
-            class="market-card crypto-card d-flex justify-content-between align-items-center"
-    >
-      <div>
-        <h2>Mercado de criptomonedas</h2>
-        <p class="update-time">
-          Actualizado hace <span id="crypto-update-time">5</span> minutos
-        </p>
-        <div class="market-stats">
-          <div class="stat">
-            <p class="stat-label">Cap. de mercado</p>
-            <p class="stat-value" id="crypto-market-cap">
-              Cargando datos...
+    <div class="container">
+      <div class="market-cards">
+        <!-- Tarjeta de Mercado de Criptomonedas -->
+        <div
+          class="market-card crypto-card d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <h2>Mercado de criptomonedas</h2>
+            <p class="update-time">
+              Actualizado hace <span id="crypto-update-time">5</span> minutos
+            </p>
+            <div class="market-stats">
+              <div class="stat">
+                <p class="stat-label">Cap. de mercado</p>
+                <p class="stat-value" id="crypto-market-cap">
+                  Cargando datos...
+                </p>
+              </div>
+              <div class="stat">
+                <p class="stat-label">Volumen 24h</p>
+                <p class="stat-value" id="crypto-volume">Cargando datos...</p>
+              </div>
+            </div>
+          </div>
+          <a
+            href="https://magiceden.io/popular-collections?filters=%7B%22timeWindow%22%3A%221d%22%2C%22collectionType%22%3A%22all%22%2C%22sortColumn%22%3A%22volume%22%2C%22sortDirection%22%3A%22desc%22%2C%22hideSpamCollections%22%3Atrue%7D&activeTab=%22TOP%22"
+            target="_blank"
+            class="nft-dia-link"
+          >
+            <div class="nft-dia-container">
+              <img
+                src="https://img-cdn.magiceden.dev/da:t/rs:fill:400:0:0/plain/https%3A%2F%2Fimg.reservoir.tools%2Fimages%2Fv2%2Fberachain%2FKWP%252BLl53XAYjHxnq%252FglaRydyR111BkOfG5qovALMNqbgfMnPuDufAvW83AUf%252F08B5MRXYDr%252BsEiMGT%252BlgxAVOesLVtk2saVcLdvSVzaXH1jNdn6bTMoQjDhmxX5Giy11.png"
+                alt="NFT del día"
+                class="nft-dia-img"
+              />
+              <div class="nft-dia-text">NFT del día</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Tarjeta de Mercado de Acciones -->
+      </div>
+
+      <!-- Barra de búsqueda y favoritos -->
+      <div class="search-bar">
+        <div class="search-input-container">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-input" placeholder="Buscar activo..." />
+        </div>
+        <button id="favorites-btn" class="favorites-btn">
+          <i class="fas fa-star"></i> Mis favoritos
+        </button>
+      </div>
+
+      <!-- Tablas de activos -->
+      <div class="asset-tables">
+        <!-- Tabla de Criptomonedas -->
+        <div class="asset-table-container">
+          <div class="table-header">
+            <h3>Criptomonedas</h3>
+            <p class="assets-count">
+              <span id="crypto-count">5</span> activos disponibles
             </p>
           </div>
-          <div class="stat">
-            <p class="stat-label">Volumen 24h</p>
-            <p class="stat-value" id="crypto-volume">Cargando datos...</p>
-          </div>
+
+          <table class="asset-table">
+            <thead>
+              <tr>
+                <th class="text-left">Activo</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Comprar</th>
+              </tr>
+            </thead>
+            <tbody id="crypto-table-body">
+              <!-- Las filas se cargarán dinámicamente con JavaScript -->
+            </tbody>
+          </table>
         </div>
+        <!-- Tabla de Acciones -->
       </div>
-      <a
-              href="https://magiceden.io/popular-collections?filters=%7B%22timeWindow%22%3A%221d%22%2C%22collectionType%22%3A%22all%22%2C%22sortColumn%22%3A%22volume%22%2C%22sortDirection%22%3A%22desc%22%2C%22hideSpamCollections%22%3Atrue%7D&activeTab=%22TOP%22"
-              target="_blank"
-              class="nft-dia-link"
-      >
-        <div class="nft-dia-container">
-          <img
-                  src="https://img-cdn.magiceden.dev/da:t/rs:fill:400:0:0/plain/https%3A%2F%2Fimg.reservoir.tools%2Fimages%2Fv2%2Fberachain%2FKWP%252BLl53XAYjHxnq%252FglaRydyR111BkOfG5qovALMNqbgfMnPuDufAvW83AUf%252F08B5MRXYDr%252BsEiMGT%252BlgxAVOesLVtk2saVcLdvSVzaXH1jNdn6bTMoQjDhmxX5Giy11.png"
-                  alt="NFT del día"
-                  class="nft-dia-img"
-          />
-          <div class="nft-dia-text">NFT del día</div>
-        </div>
-      </a>
     </div>
 
-    <!-- Tarjeta de Mercado de Acciones -->
-  </div>
+    <!-- Scripts -->
+    <script src="/js/market.js"></script>
+    <script>
+      const BASE_URL = "https://tfgfinansaludc.onrender.com";
+      const accessToken = localStorage.getItem("access_token");
 
-  <!-- Barra de búsqueda y favoritos -->
-  <div class="search-bar">
-    <div class="search-input-container">
-      <i class="fas fa-search search-icon"></i>
-      <input type="text" id="search-input" placeholder="Buscar activo..." />
-    </div>
-    <button id="favorites-btn" class="favorites-btn">
-      <i class="fas fa-star"></i> Mis favoritos
-    </button>
-  </div>
+      // Cargar el header dinámicamente
+      fetch(`${BASE_URL}/header`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("header-placeholder").innerHTML = data;
+          // Actualizar título y subtítulo después de cargar el header
+          document.getElementById("page-title").textContent =
+            "Tus activos financieros";
+          document.getElementById("page-subtitle").textContent =
+            "Gestiona tus inversiones";
 
-  <!-- Tablas de activos -->
-  <div class="asset-tables">
-    <!-- Tabla de Criptomonedas -->
-    <div class="asset-table-container">
-      <div class="table-header">
-        <h3>Criptomonedas</h3>
-        <p class="assets-count">
-          <span id="crypto-count">5</span> activos disponibles
-        </p>
-      </div>
+          // Inicializar el script del header después de que se haya cargado
+          const now = new Date();
+          const options = { month: "long", year: "numeric" };
+          const currentMonthElement = document.getElementById("current-month");
+          if (currentMonthElement) {
+            currentMonthElement.textContent = now
+              .toLocaleDateString("es-ES", options)
+              .replace(/^\w/, (c) => c.toUpperCase());
+          }
+        })
+        .catch((error) => console.error("Error al cargar el header:", error));
+    </script>
+    <div id="navigation-container"></div>
 
-      <table class="asset-table">
-        <thead>
-        <tr>
-          <th class="text-left">Activo</th>
-          <th class="text-center">Precio</th>
-          <th class="text-center">Comprar</th>
-        </tr>
-        </thead>
-        <tbody id="crypto-table-body">
-        <!-- Las filas se cargarán dinámicamente con JavaScript -->
-        </tbody>
-      </table>
-    </div>
-    <!-- Tabla de Acciones -->
-  </div>
-</div>
-
-<!-- Scripts -->
-<script src="/js/market.js"></script>
-<script>
-  const BASE_URL = "https://tfgfinansaludc.onrender.com";
-  const accessToken = localStorage.getItem("access_token");
-
-  // Cargar el header dinámicamente
-  fetch(`${BASE_URL}/header`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-          .then((response) => response.text())
-          .then((data) => {
-            document.getElementById("header-placeholder").innerHTML = data;
-            // Actualizar título y subtítulo después de cargar el header
-            document.getElementById("page-title").textContent =
-                    "Tus activos financieros";
-            document.getElementById("page-subtitle").textContent =
-                    "Gestiona tus inversiones";
-
-            // Inicializar el script del header después de que se haya cargado
-            const now = new Date();
-            const options = { month: "long", year: "numeric" };
-            const currentMonthElement = document.getElementById("current-month");
-            if (currentMonthElement) {
-              currentMonthElement.textContent = now
-                      .toLocaleDateString("es-ES", options)
-                      .replace(/^\w/, (c) => c.toUpperCase());
-            }
-          })
-          .catch((error) => console.error("Error al cargar el header:", error));
-</script>
-<div id="navigation-container"></div>
-
-<script>
-  fetch(`/navigation-bar`, {
-    headers: {
-      "Content-Type": "application/json",
-    }
-  }).then((response) => response.text())
-          .then((data) => {document.getElementById("navigation-container").innerHTML = data;});
-</script>
-</body>
+    <script>
+      fetch(`/navigation-bar`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navigation-container").innerHTML = data;
+        });
+    </script>
+  </body>
 </html>

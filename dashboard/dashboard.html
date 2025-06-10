@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    <script>
+      if (!localStorage.getItem("access_token")) {
+        window.location.href = "/login";
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard de Presupuesto</title>
@@ -134,9 +139,12 @@
       fetch(`/navigation-bar`, {
         headers: {
           "Content-Type": "application/json",
-        }
-      }).then((response) => response.text())
-              .then((data) => {document.getElementById("navigation-container").innerHTML = data;});
+        },
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navigation-container").innerHTML = data;
+        });
     </script>
     <script src="/js/header-script.js"></script>
   </body>
