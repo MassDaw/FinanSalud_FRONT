@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // const ws = new WebSocket("wss://tfgfinansaludc.onrender.com/ws");
+  // CONECTAR AL WEBSOCKET LOCAL
+  const ws = new WebSocket("ws://localhost:8001/ws");
+
   let cryptoData = null;
   let showOnlyFavorites = false;
   let searchQuery = "";
@@ -8,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const favoritesBtn = document.getElementById("favorites-btn");
   const cryptoTableBody = document.getElementById("crypto-table-body");
   const cryptoCountElement = document.getElementById("crypto-count");
+
   // Configuración de los listeners de eventos
   searchInput.addEventListener("input", (e) => {
     searchQuery = e.target.value.toLowerCase();
@@ -22,25 +25,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Gestión de la conexión WebSocket
   ws.onopen = () => {
-    console.log("Conexión WebSocket establecida");
+    console.log("✅ Conexión WebSocket establecida con servidor local");
   };
 
   ws.onclose = () => {
-    console.log("Conexión WebSocket cerrada");
+    console.log("❌ Conexión WebSocket cerrada");
     // Intentar reconectar cada 5 segundos
     setTimeout(() => {
+      console.log("🔄 Intentando reconectar...");
       window.location.reload();
     }, 5000);
   };
 
   ws.onerror = (error) => {
-    console.error("Error en WebSocket:", error);
+    console.error("❌ Error en WebSocket:", error);
   };
 
   ws.onmessage = (event) => {
+    console.log("📥 Datos recibidos del WebSocket");
     try {
       const data = JSON.parse(event.data);
+      console.log("📊 Datos parseados:", data);
+
       if (data.type === "crypto" && data.market) {
+        // Preservar favoritos existentes
         if (cryptoData?.assets) {
           const favorites = new Set(
             cryptoData.assets.filter((a) => a.isFavorite).map((a) => a.id)
@@ -52,14 +60,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         cryptoData = data;
         updateUI();
+        console.log("✅ UI actualizada con nuevos datos");
       }
     } catch (error) {
-      console.error("Error procesando mensaje:", error);
+      console.error("❌ Error procesando mensaje:", error);
     }
   };
 
   function updateUI() {
-    if (!cryptoData || !cryptoData.market) return;
+    if (!cryptoData || !cryptoData.market) {
+      console.log("⚠️ No hay datos para mostrar");
+      return;
+    }
+
     document.getElementById("crypto-market-cap").textContent =
       cryptoData.market.marketCap;
     document.getElementById("crypto-volume").textContent =
