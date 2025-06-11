@@ -30,8 +30,7 @@
           <div class="profile-image">
             <img
               id="profile-pic"
-              src="/uploads/profile-pics/profile-pic.jpg"
-              alt="Foto de perfil"
+              src="./images/profile-pic.jpg"
               class="profile-pic"
             />
             <input
@@ -41,9 +40,6 @@
               style="display: none"
             />
           </div>
-          <button class="btn btn-secondary mt-2" id="change-pic-btn">
-            Cambiar imagen
-          </button>
           <h2 class="profile-name" id="profile-username">Cargando...</h2>
           <div class="email-container">
             <p class="profile-email" id="profile-email">Cargando...</p>
@@ -207,24 +203,8 @@
           if (data.profileImageUrl) {
             const profileURL =
               data.profileImageUrl;
-
-
-            fetch(`${BASE_URL}${profileURL}`, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-            })
-                    .then((response) => response.blob()) // Parse the response as a Blob
-                    .then((blob) => {
-                      profilePic.src = URL.createObjectURL(blob); // Create a Blob URL for the image
-                    })
-                    .catch((error) => {
-                      console.error("Error fetching profile picture:", error);
-             });
-          }
-        })
+        }}
+        )
         .catch(() => {
           document.getElementById("profile-username").textContent = "Usuario";
         });
@@ -244,45 +224,7 @@
         });
     </script>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const profilePic = document.getElementById("profile-pic");
-        const uploadInput = document.getElementById("upload-profile-pic");
-        const changePicBtn = document.getElementById("change-pic-btn");
 
-        changePicBtn.addEventListener("click", () => {
-          uploadInput.click();
-        });
-
-        uploadInput.addEventListener("change", (event) => {
-          const file = event.target.files[0];
-          if (file) {
-            const formData = new FormData();
-            formData.append("file", file);
-
-            fetch(`${BASE_URL}/user/upload-profile-pic`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("access_token"),
-              },
-              body: formData,
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                if (data.success) {
-                  profilePic.src = data.imageUrl + "?t=" + new Date().getTime();
-                } else {
-                  alert("Error al subir la imagen: " + data.message);
-                }
-              })
-              .catch(() => {
-                alert("Error al conectar con el servidor.");
-              });
-          }
-        });
-      });
-    </script>
 
     <script>
       // Cargar todos los datos financieros

@@ -108,11 +108,7 @@
   const accessToken = localStorage.getItem("access_token");
 
   // Cargar el header dinámicamente
-  fetch(`${BASE_URL}/header`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
+  fetch(`/header`, {
   })
           .then((response) => response.text())
           .then((data) => {
